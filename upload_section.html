@@ -1,0 +1,81 @@
+<!-- This is the content for upload_section.html -->
+<section id="upload-records" class="bg-indigo-50 py-20">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-3xl font-bold mb-4">Upload Your First Record</h2>
+        <p class="text-gray-600 mb-8 max-w-2xl mx-auto">Ready to get started? Securely upload a document like a PDF or an imaging file to add it to your HealthLock profile.</p>
+        
+        <div class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+            <div id="drop-zone" class="flex items-center justify-center w-full">
+                <label for="file-upload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <i class="fas fa-cloud-arrow-up text-5xl text-gray-400 mb-4"></i>
+                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-500">PDF, PNG, JPG, or DICOM files</p>
+                    </div>
+                    <input id="file-upload" type="file" class="hidden" />
+                </label>
+            </div> 
+            <div id="file-display" class="hidden mt-4 text-left">
+                <p class="font-semibold text-gray-700">Selected file:</p>
+                <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg mt-2">
+                    <span id="file-name" class="text-sm text-gray-800"></span>
+                    <button id="remove-file" class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                </div>
+            </div>
+            <button id="upload-button" class="mt-6 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 disabled:bg-gray-400" disabled>
+                Upload File
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+    // This script is self-contained for the upload component
+    const dropZone = document.getElementById('drop-zone');
+    const fileUpload = document.getElementById('file-upload');
+    const fileDisplay = document.getElementById('file-display');
+    const fileNameDisplay = document.getElementById('file-name');
+    const removeFileBtn = document.getElementById('remove-file');
+    const uploadButton = document.getElementById('upload-button');
+
+    function handleFileSelect(file) {
+        if (!file) return;
+        fileNameDisplay.textContent = file.name;
+        fileDisplay.classList.remove('hidden');
+        dropZone.classList.add('hidden');
+        uploadButton.disabled = false;
+    }
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-indigo-500');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-indigo-500');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-indigo-500');
+        if (e.dataTransfer.files.length) {
+            fileUpload.files = e.dataTransfer.files;
+            handleFileSelect(e.dataTransfer.files[0]);
+        }
+    });
+
+    fileUpload.addEventListener('change', () => {
+        if (fileUpload.files.length) {
+            handleFileSelect(fileUpload.files[0]);
+        }
+    });
+
+    removeFileBtn.addEventListener('click', () => {
+        fileUpload.value = ''; // Clear the file input
+        fileDisplay.classList.add('hidden');
+        dropZone.classList.remove('hidden');
+        uploadButton.disabled = true;
+    });
+</script>

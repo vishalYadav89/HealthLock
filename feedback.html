@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - HealthLock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="feedback_style.css">
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-lg bg-white rounded-xl shadow-2xl p-8 relative">
+        <a href="/" title="Go back" class="absolute top-4 left-4 text-gray-400 hover:text-indigo-600 transition-colors">
+            <i class="fas fa-arrow-left text-2xl"></i>
+        </a>
+        
+        <div class="text-center mb-8">
+            <a href="index.html" class="text-3xl font-bold text-indigo-600">
+                <i class="fas fa-shield-heart mr-2"></i>HealthLock
+            </a>
+            <h1 class="text-2xl font-bold text-gray-800 mt-4">Submit Your Feedback</h1>
+            <p class="text-gray-500 mt-2">We'd love to hear your thoughts and suggestions!</p>
+        </div>
+
+        <form>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name (Optional)</label>
+                    <input type="text" id="name" name="Name" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <input type="email" id="email" name="Email" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label for="category" class="block text-gray-700 text-sm font-bold mb-2">Category</label>
+                <select id="category" name="Category" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                    <option>General Feedback</option>
+                    <option>Bug Report</option>
+                    <option>Feature Suggestion</option>
+                    <option>Usability Issue</option>
+                </select>
+            </div>
+
+            <div class="mb-6">
+                <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Message</label>
+                <textarea id="message" name="Message" rows="5" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" required></textarea>
+            </div>
+
+            <a id="send-feedback-link" href="#" class="block text-center w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300">
+                Send Feedback via Email
+            </a>
+        </form>
+    </div>
+
+    <script>
+        // *** REVISED SCRIPT FOR ROBUST BEHAVIOR ***
+        const feedbackLink = document.getElementById('send-feedback-link');
+        
+        // Get all form elements
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const categorySelect = document.getElementById('category');
+        const messageTextarea = document.getElementById('message');
+
+        function updateMailtoLink() {
+            // Get current form values
+            const name = nameInput.value;
+            const email = emailInput.value;
+            const category = categorySelect.value;
+            const message = messageTextarea.value;
+
+            // Basic validation check to see if the link should be active
+            if (!email || !message) {
+                feedbackLink.style.pointerEvents = 'none'; // Make link unclickable
+                feedbackLink.style.opacity = '0.5';       // Visually indicate it's disabled
+            } else {
+                feedbackLink.style.pointerEvents = 'auto';
+                feedbackLink.style.opacity = '1';
+            }
+
+            // Construct the mailto link
+            const subject = `HealthLock Feedback: ${category}`;
+            const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+            
+            // Encode components for the URL and update the href attribute
+            const mailtoLink = `mailto:healthlock.care@mail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            feedbackLink.href = mailtoLink;
+        }
+
+        // Add event listeners to update the link whenever the user changes the form
+        nameInput.addEventListener('input', updateMailtoLink);
+        emailInput.addEventListener('input', updateMailtoLink);
+        categorySelect.addEventListener('change', updateMailtoLink);
+        messageTextarea.addEventListener('input', updateMailtoLink);
+
+        // Run the function once on page load to set the initial state
+        updateMailtoLink();
+    </script>
+
+</body>
+</html>

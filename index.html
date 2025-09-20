@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthLock - Secure Patient Record Sharing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        /* Styles for the modal to ensure smooth transitions */
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .modal-panel {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-indigo-600">
+                <i class="fas fa-shield-heart mr-2"></i>HealthLock
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#features" class="text-gray-600 hover:text-indigo-600">Features</a>
+                <a href="#how-it-works" class="text-gray-600 hover:text-indigo-600">How It Works</a>
+                <a href="/scanner.html" class="text-gray-600 hover:text-indigo-600">Scan QR Code</a>
+                <div id="nav-logged-out" class="flex items-center space-x-6">
+                    <a href="/login.html" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">
+                        Login / Sign Up
+                    </a>
+                </div>
+                <div id="nav-logged-in" class="hidden items-center space-x-6">
+                    <a href="/profile.html" class="text-gray-600 hover:text-indigo-600 flex items-center">
+                        <i class="fas fa-user-circle text-xl mr-2"></i>
+                        <span id="nav-user-name">Profile</span>
+                    </a>
+                    <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                        Logout
+                    </button>
+                </div>
+            </div>
+            <button class="md:hidden text-gray-600" id="mobile-menu-button">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </nav>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <a href="#features" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Features</a>
+            <a href="#how-it-works" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">How It Works</a>
+            <a href="/scanner.html" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Scan QR Code</a>
+            <a href="/login.html" id="mobile-login-link" class="block px-6 py-3 bg-indigo-600 text-white text-center rounded-b-lg hover:bg-indigo-700">Login / Sign Up</a>
+            <div id="mobile-logged-in" class="hidden">
+                <a href="/profile.html" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">My Profile</a>
+                <button id="mobile-logout-btn" class="block w-full text-left px-6 py-3 bg-red-500 text-white text-center hover:bg-red-600">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-gradient text-white py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">Securely Share Your Health Records.</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">HealthLock empowers you to control your medical data with temporary, encrypted QR codes. Share with your doctor, not the world.</p>
+                <a href="/login.html" id="hero-cta-btn" class="bg-white text-indigo-600 font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition duration-300 transform hover:scale-105">Get Started Now</a>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="bg-white py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">Simple & Secure in 3 Steps</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-12">
+                    <div class="text-center">
+                        <div class="bg-indigo-100 text-indigo-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-upload text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">1. Upload Records</h3>
+                        <p class="text-gray-600 max-w-xs">A patient securely uploads their medical history to the app.</p>
+                    </div>
+                    <div class="text-gray-300 text-4xl hidden md:block">&rarr;</div>
+                     <div class="text-gray-300 text-4xl md:hidden">&darr;</div>
+                    <div class="text-center">
+                        <div class="bg-indigo-100 text-indigo-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-share-nodes text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">2. Generate & Share</h3>
+                        <p class="text-gray-600 max-w-xs">The app generates a secure, time-sensitive QR code.</p>
+                    </div>
+                    <div class="text-gray-300 text-4xl hidden md:block">&rarr;</div>
+                    <div class="text-gray-300 text-4xl md:hidden">&darr;</div>
+                    <div class="text-center">
+                        <div class="bg-indigo-100 text-indigo-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-user-doctor text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">3. Doctor Access</h3>
+                        <p class="text-gray-600 max-w-xs">The doctor scans the QR to retrieve records securely.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div id="get-started-section" class="hidden">
+           <section id="upload-records" class="bg-indigo-50 py-20">
+                <div class="container mx-auto px-6">
+                     <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold">Get Started</h2>
+                        <p class="text-gray-600 mt-2">Upload a file to generate a QR code, or scan a code to access a file.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8 items-stretch">
+                        <div class="bg-white p-8 rounded-xl shadow-lg flex flex-col">
+                            
+                            <h3 class="text-2xl font-bold mb-2 text-center">Upload & Share</h3>
+                            <p class="text-gray-600 mb-6 text-center">Generate and download a secure QR code for sharing.</p>
+                            <div id="drop-zone" class="flex items-center justify-center w-full flex-grow">
+                                <label for="file-upload" class="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <i class="fas fa-cloud-arrow-up text-5xl text-gray-400 mb-4"></i>
+                                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                        <p class="text-xs text-gray-500">PDF, PNG, JPG, or DICOM files</p>
+                                    </div>
+                                    <input id="file-upload" type="file" class="hidden" />
+                                </label>
+                            </div> 
+                            <div id="file-display" class="hidden mt-4 text-left">
+                                <p class="font-semibold text-gray-700">Selected file:</p>
+                                <div class="flex items-center justify-between bg-gray-100 p-3 rounded-lg mt-2">
+                                    <span id="file-name" class="text-sm text-gray-800"></span>
+                                    <button type="button" id="remove-file" class="text-red-500 hover:text-red-700">
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
+                                </div>
+                                <button type="button" id="upload-button" class="mt-6 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 disabled:bg-gray-400" disabled>
+                                    Generate & Download QR Code
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-white p-8 rounded-xl shadow-lg text-center flex flex-col justify-center items-center">
+                            <i class="fas fa-qrcode text-9xl text-indigo-400 mb-6"></i>
+                            <h3 class="text-2xl font-bold mb-2">Need to Access a File?</h3>
+                            <p class="text-gray-600 mb-6">If you have a HealthLock QR code, you can scan it here to securely access the shared medical record.</p>
+                            <a href="scanner.html" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-md">
+                                Scan a QR Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="login-prompt" class="text-center py-20 bg-indigo-50">
+            <h2 class="text-3xl font-bold">Please Log In to Continue</h2>
+            <p class="text-gray-600 mt-2 mb-6">You need to be logged in to upload or scan files.</p>
+            <a href="/login.html" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-full hover:bg-indigo-700 transition duration-300 transform hover:scale-105">
+                Login or Create Account
+            </a>
+        </div>
+
+        <section id="features" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">Your Data, Your Control</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div id="upload-card" class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition duration-300 cursor-pointer">
+                        <div class="text-indigo-500 text-5xl mb-4"><i class="fas fa-file-arrow-up"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">Secure Record Upload</h3>
+                        <p class="text-gray-600">Easily upload and digitize your medical history, including PDFs and imaging files, in one secure place.</p>
+                    </div>
+                    
+                    <div id="qr-card" class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition duration-300 cursor-pointer">
+                        <div class="text-indigo-500 text-5xl mb-4"><i class="fas fa-qrcode"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">Temporary QR/Token Access</h3>
+                        <p class="text-gray-600">Generate time-limited QR codes to grant temporary access to doctors, ensuring your data isn't exposed indefinitely.</p>
+                    </div>
+
+                    <div id="encryption-card" class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition duration-300 cursor-pointer">
+                        <div class="text-indigo-500 text-5xl mb-4"><i class="fas fa-lock"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">End-to-End Encryption</h3>
+                        <p class="text-gray-600">All your stored and shared data is protected with robust end-to-end encryption, maintaining complete privacy.</p>
+                    </div>
+
+                     <div id="rbac-card" class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition duration-300 cursor-pointer">
+                        <div class="text-indigo-500 text-5xl mb-4"><i class="fas fa-users-gear"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">Role-Based Access Control</h3>
+                        <p class="text-gray-600">You decide who sees what. Grant full access to doctors, partial to pharmacists, or read-only to diagnostics.</p>
+                    </div>
+
+                     <div id="audit-card" class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition duration-300 cursor-pointer">
+                        <div class="text-indigo-500 text-5xl mb-4"><i class="fas fa-clipboard-list"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">Comprehensive Auditing</h3>
+                        <p class="text-gray-600">An immutable log records every access with timestamps and user identity, giving you full transparency.</p>
+                    </div>
+
+                     <div id="notification-card" class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:-translate-y-2 transition duration-300 cursor-pointer">
+                        <div class="text-indigo-500 text-5xl mb-4"><i class="fas fa-bell"></i></div>
+                        <h3 class="text-xl font-semibold mb-2">Instant Notifications</h3>
+                        <p class="text-gray-600">Receive a log notification the moment a doctor accesses your records, so you're always in the loop.</p>
+                    </div>
+                </div>
+
+                <div class="hidden">
+                    <div id="upload-details">
+                        <h4 class="text-2xl font-bold mb-4 text-indigo-800">Why Secure Uploads Matter</h4>
+                        <p class="text-gray-700 mb-4">
+                            Our secure upload process ensures that your sensitive medical files, such as lab results, prescriptions, and X-rays, are encrypted from the moment they leave your device. We support a wide range of file formats, including PDFs, JPEGs, and the medical-standard DICOM format, making it easy to consolidate all your records. This process is designed to prevent data interception and tampering, giving you confidence in the security of your health data.
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li><span class="font-semibold">Encrypted Transit</span>: Your files are encrypted during the upload process using HTTPS to prevent unauthorized access.</li>
+                            <li><span class="font-semibold">Multiple Formats</span>: Compatible with common document and imaging file types.</li>
+                            <li><span class="font-semibold">Verifiable Integrity</span>: The system checks the integrity of the file to ensure it hasn't been corrupted.</li>
+                        </ul>
+                    </div>
+                    <div id="qr-details">
+                        <h4 class="text-2xl font-bold mb-4 text-indigo-800">How QR/Token Access Secures Your Data</h4>
+                        <p class="text-gray-700 mb-4">
+                            Temporary QR codes and tokens provide a secure, ephemeral link to your records. This method avoids the need to send permanent links or files via email, which can be vulnerable. The token is valid for a short, predetermined period, after which it expires, preventing anyone from using it again. This ensures that access is only granted at the exact moment it's needed for a consultation or procedure.
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li><span class="font-semibold">Time-Bound</span>: Access is automatically revoked after a set duration.</li>
+                            <li><span class="font-semibold">Single-Use</span>: Tokens can be configured for a single-time access, enhancing security.</li>
+                            <li><span class="font-semibold">Revocable</span>: Patients can manually revoke access at any time.</li>
+                        </ul>
+                    </div>
+                    <div id="encryption-details">
+                        <h4 class="text-2xl font-bold mb-4 text-indigo-800">The Power of End-to-End Encryption (E2EE)</h4>
+                        <p class="text-gray-700 mb-4">
+                            End-to-End Encryption is a cryptographic method that ensures only you and the person you are communicating with can read your messages or data. With E2EE, your data is encrypted on your device and can only be decrypted by the intended recipient. This means that HealthLock, or any third party, cannot access your records, even if they were to intercept the data.
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li><span class="font-semibold">Zero-Knowledge</span>: HealthLock cannot view your data.</li>
+                            <li><span class="font-semibold">Secure Transmission</span>: Your records are unreadable during transit.</li>
+                            <li><span class="font-semibold">Privacy Compliant</span>: Meets the highest standards for data privacy regulations like HIPAA and GDPR.</li>
+                        </ul>
+                    </div>
+                    <div id="rbac-details">
+                        <h4 class="text-2xl font-bold mb-4 text-indigo-800">Granular Control with RBAC</h4>
+                        <p class="text-gray-700 mb-4">
+                            Our Role-Based Access Control system allows you to define specific permissions for different types of healthcare professionals. A doctor might need full access to your entire medical history to make a diagnosis, while a pharmacist only needs access to your prescription history. This fine-grained control prevents over-sharing and ensures that each professional only sees the information they absolutely need.
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li><span class="font-semibold">Full Access</span>: For primary care doctors and specialists.</li>
+                            <li><span class="font-semibold">Partial Access</span>: For pharmacists to view prescription history only.</li>
+                            <li><span class="font-semibold">Read-Only</span>: For diagnostics labs to view test results without modifying them.</li>
+                        </ul>
+                    </div>
+                    <div id="audit-details">
+                        <h4 class="text-2xl font-bold mb-4 text-indigo-800">Full Transparency with the Audit Log</h4>
+                        <p class="text-gray-700 mb-4">
+                            The comprehensive audit log creates an unchangeable record of every time your data is accessed. It logs the user's identity, the time of access, and what specific records were viewed. This feature provides complete transparency and accountability, allowing you to see exactly who has viewed your medical information and when, which is a key component of data security and trust.
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li><span class="font-semibold">Timestamped Logs</span>: Every access event is time-stamped for a precise record.</li>
+                            <li><span class="font-semibold">User Identification</span>: Know exactly which professional accessed your records.</li>
+                            <li><span class="font-semibold">Immutability</span>: The log cannot be altered, ensuring it is a reliable record.</li>
+                        </ul>
+                    </div>
+                    <div id="notification-details">
+                        <h4 class="text-2xl font-bold mb-4 text-indigo-800">Stay Informed with Real-Time Alerts</h4>
+                        <p class="text-gray-700 mb-4">
+                            Our instant notification system keeps you in complete control by alerting you the moment your medical records are accessed. This real-time alert is a crucial part of our transparency and security model. It confirms that the temporary token or QR code was used for its intended purpose and provides immediate peace of mind.
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li><span class="font-semibold">Immediate Alerts</span>: Get notified as soon as a doctor accesses your file.</li>
+                            <li><span class="font-semibold">Security Confirmation</span>: Confirms that a QR code scan was successful.</li>
+                            <li><span class="font-semibold">User-Friendly</span>: A simple, clear notification that puts you in control.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="roles" class="py-20">
+             <div class="container mx-auto px-6">
+                 <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-4">For Patients</h2>
+                        <p class="text-gray-600 mb-6">Take full ownership of your health journey. No more carrying physical files or worrying about unauthorized access. With HealthLock, you are the gatekeeper of your sensitive medical information. Share it when you need to, and revoke access anytime.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i>Complete privacy and control.</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i>Simplified sharing with any provider.</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i>Transparent access logs.</li>
+                        </ul>
+                    </div>
+                    <div>
+                         <h2 class="text-3xl font-bold mb-4">For Healthcare Providers</h2>
+                         <p class="text-gray-600 mb-6">Receive patient records instantly and securely. Eliminate administrative overhead and focus on what matters most: patient care. HealthLock integrates seamlessly into your workflow, providing quick access to the information you need, with patient consent built-in.</p>
+                         <ul class="space-y-3">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i>Instant access to patient-approved data.</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i>Reduced paperwork and delays.</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-3"></i>Enhanced data security and compliance.</li>
+                        </ul>
+                    </div>
+                 </div>
+            </div>
+        </section>
+        
+        <section class="hero-gradient text-white">
+            <div class="container mx-auto px-6 py-20 text-center">
+                <h2 class="text-3xl font-bold mb-4">Ready to Take Control of Your Health Data?</h2>
+                <p class="text-lg mb-8 max-w-2xl mx-auto">Join HealthLock today and experience a new standard of privacy and convenience in healthcare.</p>
+                <a href="/login.html" id="footer-cta-btn" class="bg-white text-indigo-600 font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition duration-300 transform hover:scale-105">Create Your Secure Account</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-white py-10">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 HealthLock. All rights reserved.</p>
+            <p>A Hackathon Project.</p>
+        </div>
+    </footer>
+
+    <a href="/feedback.html" class="fixed bottom-5 right-5 bg-indigo-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-110">
+        <i class="fas fa-comment-dots text-2xl"></i>
+    </a>
+    
+    <div id="feature-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div id="modal-overlay" class="absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0"></div>
+        <div id="modal-panel" class="bg-white rounded-xl shadow-2xl p-8 max-w-2xl w-full z-10 transform scale-95 opacity-0">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modal-title" class="text-2xl font-bold text-indigo-800"></h3>
+                <button id="modal-close-btn" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            </div>
+            <div id="modal-content" class="text-gray-700"></div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLoggedIn = document.getElementById('nav-logged-in');
+            const navLoggedOut = document.getElementById('nav-logged-out');
+            const mobileLoggedIn = document.getElementById('mobile-logged-in');
+            const mobileLoginLink = document.getElementById('mobile-login-link');
+            const navUserName = document.getElementById('nav-user-name');
+            const getStartedSection = document.getElementById('get-started-section');
+            const loginPrompt = document.getElementById('login-prompt');
+            const heroCtaBtn = document.getElementById('hero-cta-btn');
+            const footerCtaBtn = document.getElementById('footer-cta-btn');
+            
+            const userDataString = localStorage.getItem('healthlockUser');
+
+            if (userDataString) {
+                const userData = JSON.parse(userDataString);
+                navLoggedIn.classList.remove('hidden');
+                navLoggedIn.classList.add('flex');
+                mobileLoggedIn.classList.remove('hidden');
+                getStartedSection.classList.remove('hidden');
+                navLoggedOut.classList.add('hidden');
+                mobileLoginLink.classList.add('hidden');
+                loginPrompt.classList.add('hidden');
+                navUserName.textContent = userData.name;
+
+                heroCtaBtn.textContent = 'Go to My Profile';
+                heroCtaBtn.href = '/profile.html';
+
+                footerCtaBtn.textContent = 'Upload a File Now';
+                footerCtaBtn.href = '#upload-records';
+
+            } else {
+                getStartedSection.classList.add('hidden');
+                loginPrompt.classList.remove('hidden');
+            }
+
+            const logoutBtn = document.getElementById('logout-btn');
+            const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+
+            function logout() {
+                localStorage.removeItem('healthlockUser');
+                window.location.href = '/';
+            }
+
+            if(logoutBtn) logoutBtn.addEventListener('click', logout);
+            if(mobileLogoutBtn) mobileLogoutBtn.addEventListener('click', logout);
+        });
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+        
+        const uploadButton = document.getElementById('upload-button');
+        if (uploadButton) {
+            const dropZone = document.getElementById('drop-zone');
+            const fileUpload = document.getElementById('file-upload');
+            const fileDisplay = document.getElementById('file-display');
+            const fileNameDisplay = document.getElementById('file-name');
+            const removeFileBtn = document.getElementById('remove-file');
+
+            function handleFileSelect(file) {
+                if (!file) return;
+                fileNameDisplay.textContent = file.name;
+                fileDisplay.classList.remove('hidden');
+                dropZone.classList.add('hidden');
+                uploadButton.disabled = false;
+            }
+
+            dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500'); });
+            dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('border-indigo-500'); });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-indigo-500');
+                if (e.dataTransfer.files.length) {
+                    fileUpload.files = e.dataTransfer.files;
+                    handleFileSelect(e.dataTransfer.files[0]);
+                }
+            });
+            fileUpload.addEventListener('change', () => {
+                if (fileUpload.files.length) handleFileSelect(fileUpload.files[0]);
+            });
+            removeFileBtn.addEventListener('click', () => {
+                fileUpload.value = '';
+                fileDisplay.classList.add('hidden');
+                dropZone.classList.remove('hidden');
+                uploadButton.disabled = true;
+            });
+            
+            uploadButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const file = fileUpload.files[0];
+                if (!file) { alert("Please select a file first."); return; }
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                uploadButton.disabled = true;
+                uploadButton.textContent = 'Generating...';
+
+                fetch('http://127.0.0.1:5000/upload', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        const link = document.createElement('a');
+                        link.href = data.download_qr_url;
+                        link.download = `HealthLock_QR_${data.original_filename.split('.')[0]}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        alert('Your QR code is downloading!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error uploading file:', error);
+                    alert('An error occurred while uploading the file.');
+                })
+                .finally(() => {
+                    removeFileBtn.click();
+                    uploadButton.textContent = 'Generate & Download QR Code';
+                });
+            });
+        }
+
+        const featureModal = document.getElementById('feature-modal');
+        if (featureModal) {
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalPanel = document.getElementById('modal-panel');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const featureCards = ['upload-card', 'qr-card', 'encryption-card', 'rbac-card', 'audit-card', 'notification-card'];
+            
+            const openModal = (cardId) => {
+                const detailsId = cardId.replace('-card', '-details');
+                const detailsContent = document.getElementById(detailsId);
+                if (!detailsContent) return;
+
+                const contentClone = detailsContent.cloneNode(true);
+                const titleElement = contentClone.querySelector('h4');
+                modalTitle.textContent = titleElement.textContent;
+                titleElement.remove();
+                modalContent.innerHTML = '';
+                modalContent.appendChild(contentClone);
+                
+                featureModal.classList.remove('hidden');
+                
+                requestAnimationFrame(() => {
+                    modalOverlay.classList.remove('opacity-0');
+                    modalPanel.classList.remove('opacity-0', 'scale-95');
+                });
+            };
+
+            const closeModal = () => {
+                modalOverlay.classList.add('opacity-0');
+                modalPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    featureModal.classList.add('hidden');
+                }, 300);
+            };
+
+            featureCards.forEach(cardId => {
+                const card = document.getElementById(cardId);
+                if (card) {
+                    card.addEventListener('click', () => openModal(cardId));
+                }
+            });
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', closeModal);
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,9 @@
+/* General body styles */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Gradient for the hero and call-to-action sections */
+.hero-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

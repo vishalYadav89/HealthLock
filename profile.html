@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - HealthLock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/profile_style.css">
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-indigo-600">
+                <i class="fas fa-shield-heart mr-2"></i>HealthLock
+            </a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="/#features" class="text-gray-600 hover:text-indigo-600">Features</a>
+                <a href="/scanner.html" class="text-gray-600 hover:text-indigo-600">Scan QR Code</a>
+                <a href="/feedback.html" class="text-gray-600 hover:text-indigo-600">Feedback</a>
+                <button id="logout-btn-header" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">
+                    Logout
+                </button>
+            </div>
+            <button class="md:hidden text-gray-600" id="mobile-menu-button">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </nav>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <a href="/#features" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Features</a>
+            <a href="/scanner.html" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Scan QR Code</a>
+            <a href="/feedback.html" class="block px-6 py-3 text-gray-600 hover:bg-gray-100">Feedback</a>
+            <button id="logout-btn-mobile" class="block w-full text-left px-6 py-3 bg-indigo-600 text-white text-center rounded-b-lg hover:bg-indigo-700">Logout</button>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center">
+        <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-8 m-4 text-center relative">
+            
+            <a href="/" title="Go back" class="absolute top-4 left-4 text-gray-400 hover:text-indigo-600 transition-colors">
+                <i class="fas fa-arrow-left text-2xl"></i>
+            </a>
+
+            <div class="mb-6">
+                <div class="w-32 h-32 rounded-full bg-indigo-100 mx-auto flex items-center justify-center">
+                    <i class="fas fa-user-shield text-6xl text-indigo-500"></i>
+                </div>
+            </div>
+            <h1 id="user-name" class="text-3xl font-bold text-gray-800">Loading...</h1>
+            <p id="user-role" class="text-lg text-indigo-600 font-semibold mt-2 capitalize">Loading...</p>
+            <div class="mt-8 border-t pt-6">
+                <p id="user-email" class="text-gray-500 mb-6">Loading...</p>
+                <button id="logout-btn-main" class="w-full bg-red-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-600 transition duration-300">
+                    Log Out
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 HealthLock. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Function to handle logout
+        function logout() {
+            localStorage.removeItem('healthlockUser');
+            window.location.href = '/';
+        }
+
+        // Attach logout function to all logout buttons
+        document.getElementById('logout-btn-header').addEventListener('click', logout);
+        document.getElementById('logout-btn-mobile').addEventListener('click', logout);
+        document.getElementById('logout-btn-main').addEventListener('click', logout);
+
+        // Populate user data on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const userDataString = localStorage.getItem('healthlockUser');
+            
+            if (!userDataString) {
+                // If no user data, redirect to login page
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const userData = JSON.parse(userDataString);
+            
+            document.getElementById('user-name').textContent = userData.name;
+            document.getElementById('user-role').textContent = userData.role;
+            document.getElementById('user-email').textContent = userData.email;
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your QR Code - HealthLock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="qr_style.css">
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-sm bg-white rounded-xl shadow-2xl p-8 text-center">
+        <a href="/" class="text-3xl font-bold text-indigo-600">
+            <i class="fas fa-shield-heart mr-2"></i>HealthLock
+        </a>
+        <h1 class="text-2xl font-bold text-gray-800 mt-4">Your QR Code is Ready</h1>
+        <p class="text-gray-500 mt-2">Share this with your healthcare provider. A download of the QR code has started automatically.</p>
+        
+        <div class="mt-6">
+            <img id="qr-code-image" src="" alt="Generated QR Code" class="mx-auto border-4 border-gray-200 rounded-lg">
+            <p id="file-name" class="font-semibold text-gray-700 mt-4"></p>
+            <p class="text-sm text-gray-500">This code will expire in 30 minutes.</p>
+        </div>
+
+        <button onclick="window.print()" class="mt-6 w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 transition duration-300">
+            <i class="fas fa-print mr-2"></i>Print QR Code
+        </button>
+    </div>
+
+    <script>
+        // This script runs when the page loads
+        window.onload = function() {
+            // Get the URL parameters
+            const params = new URLSearchParams(window.location.search);
+            const qrUrl = params.get('qr_url');
+            const fileName = params.get('filename');
+
+            if (qrUrl && fileName) {
+                // Set the image source to display it on the page
+                document.getElementById('qr-code-image').src = qrUrl;
+                document.getElementById('file-name').textContent = `QR Code for: ${fileName}`;
+
+                // --- *** FIX: AUTOMATICALLY DOWNLOAD THE QR CODE *** ---
+                // 1. Create a temporary link element
+                const link = document.createElement('a');
+                link.href = qrUrl;
+
+                // 2. Set the download attribute with a suggested filename
+                link.download = `HealthLock_QR_${fileName.split('.')[0]}.png`;
+                
+                // 3. Programmatically click the link to trigger the download
+                link.click();
+                
+            } else {
+                // Handle the case where the parameters are missing
+                document.body.innerHTML = '<p class="text-red-500">Error: Could not load QR code. Please try again.</p>';
+            }
+        };
+    </script>
+
+</body>
+</html>
